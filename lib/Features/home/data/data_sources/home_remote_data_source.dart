@@ -1,6 +1,9 @@
 import 'package:clean_arch_bookly/Features/home/data/models/book_model/book_model.dart';
 import 'package:clean_arch_bookly/Features/home/domain/entites/book_entity.dart';
+import 'package:clean_arch_bookly/constants.dart';
 import 'package:clean_arch_bookly/core/utils/api_services.dart';
+import 'package:clean_arch_bookly/core/utils/functions/save_books_to_hive.dart';
+import 'package:hive_flutter/adapters.dart';
 
 abstract class HomeRemoteDataSource {
   // we do not use Either class her because decision if data returns or not we make it into HomeRepo data layer to fetch data only
@@ -18,8 +21,11 @@ class HomeRemoteDataSourceImpl extends HomeRemoteDataSource {
       endPoint: "volumes?Filtering=free-ebooks&q=programming",
     );
     List<BookEntity> booksList = parseBooks(data); // for Single Responsability
+    saveBooksToHive(booksList , kFeaturedBox);
     return booksList;
   }
+
+
 
   @override
   Future<List<BookEntity>> fetchNewestBooks() async {
@@ -29,6 +35,8 @@ class HomeRemoteDataSourceImpl extends HomeRemoteDataSource {
     List<BookEntity> newestBooksList = parseBooks(data);
     return newestBooksList;
   }
+
+
 // helper method to parse form Map<String, dynamic> to List<BookEntity>
     List<BookEntity> parseBooks(Map<String, dynamic> data) {
     List<BookEntity> booksList = [];
