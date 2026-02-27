@@ -29,8 +29,17 @@ class HomeRepoImpl extends HomeRepo {
   }
 
   @override
-  Future<Either<Failure, List<BookEntity>>> fetchNewestBooks() {
-    // TODO: implement fetchNewestBooks
-    throw UnimplementedError();
+  Future<Either<Failure, List<BookEntity>>> fetchNewestBooks() async {
+    try {
+      List<BookEntity> localBooks = homeLocalDataSource.fetchNewestBooks();
+      if (localBooks.isNotEmpty) {
+        return right(localBooks);
+      }
+      List<BookEntity> remoteBooks = await homeRemoteDataSource
+          .fetchNewestBooks();
+      return right(remoteBooks);
+    } catch (e) {
+      return left(Failure());
+    }
   }
 }
