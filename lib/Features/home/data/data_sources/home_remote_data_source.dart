@@ -21,24 +21,23 @@ class HomeRemoteDataSourceImpl extends HomeRemoteDataSource {
       endPoint: "volumes?Filtering=free-ebooks&q=programming",
     );
     List<BookEntity> booksList = parseBooks(data); // for Single Responsability
-    saveBooksToHive(booksList , kFeaturedBox);
+    saveBooksToHive(booksList, kFeaturedBox);
     return booksList;
   }
-
-
 
   @override
   Future<List<BookEntity>> fetchNewestBooks() async {
     var data = await apiServices.get(
       endPoint: "volumes?Filtering=free-ebooks&Sorting=newest&q=programming",
     );
+
     List<BookEntity> newestBooksList = parseBooks(data);
+    saveBooksToHive(newestBooksList, kNewestBox);
     return newestBooksList;
   }
 
-
-// helper method to parse form Map<String, dynamic> to List<BookEntity>
-    List<BookEntity> parseBooks(Map<String, dynamic> data) {
+  // helper method to parse form Map<String, dynamic> to List<BookEntity>
+  List<BookEntity> parseBooks(Map<String, dynamic> data) {
     List<BookEntity> booksList = [];
     for (var bookItem in data["items"]) {
       booksList.add(BookModel.fromBookJson(bookItem));
