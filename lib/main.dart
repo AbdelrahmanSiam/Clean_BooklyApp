@@ -7,6 +7,7 @@ import 'package:clean_arch_bookly/Features/home/presentation/manager/newest_book
 import 'package:clean_arch_bookly/constants.dart';
 import 'package:clean_arch_bookly/core/utils/app_router.dart';
 import 'package:clean_arch_bookly/core/utils/functions/set_up_service_locator.dart';
+import 'package:clean_arch_bookly/core/utils/simple_bloc_observer.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:google_fonts/google_fonts.dart';
@@ -19,6 +20,7 @@ void main() async {
   Hive.registerAdapter(BookEntityAdapter());
   await Hive.openBox<BookEntity>(kFeaturedBox);
   await Hive.openBox<BookEntity>(kNewestBox);
+  Bloc.observer = SimpleBlocObserver();
   runApp(const Bookly());
 }
 
