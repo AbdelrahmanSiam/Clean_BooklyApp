@@ -10,9 +10,13 @@ part 'featured_books_state.dart';
 class FeaturedBooksCubit extends Cubit<FeaturedBooksState> {
   FeaturedBooksCubit(this.fetchFeaturedBooksUseCase)
     : super(FeaturedBooksInitialState());
+
   final FetchFeaturedBooksUseCase fetchFeaturedBooksUseCase;
+
   Future<void> fetchFeaturedBooks({int pageNumber = 0}) async {
-    emit(FeaturedBooksLoadingState());
+    if (pageNumber == 0) {// to load only at first time
+      emit(FeaturedBooksLoadingState());
+    }
     Either<Failure, List<BookEntity>> result = await fetchFeaturedBooksUseCase
         .call(pageNumber);
     result.fold(

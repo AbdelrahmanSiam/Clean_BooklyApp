@@ -5,6 +5,7 @@ sealed class FeaturedBooksState {}
 
 final class FeaturedBooksInitialState extends FeaturedBooksState {}
 final class FeaturedBooksLoadingState extends FeaturedBooksState {}
+final class FeaturedBooksPaginationLoadingState extends FeaturedBooksState {}
 final class FeaturedBooksFailureState extends FeaturedBooksState {
   final String errMessage;
 
