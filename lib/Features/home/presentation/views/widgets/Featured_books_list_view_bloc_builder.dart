@@ -9,10 +9,10 @@ class FeaturedBooksListViewBlocBuilder extends StatefulWidget {
 
   @override
   State<FeaturedBooksListViewBlocBuilder> createState() =>
-      _FeaturedBooksListViewBlocBuilderState();
+      _FeaturedBooksListViewBlocConsumerState();
 }
 
-class _FeaturedBooksListViewBlocBuilderState
+class _FeaturedBooksListViewBlocConsumerState
     extends State<FeaturedBooksListViewBlocBuilder> {
   List<BookEntity> books = [];
   @override
@@ -21,13 +21,21 @@ class _FeaturedBooksListViewBlocBuilderState
       listener: (context, state) {
         if (state is FeaturedBooksSuccessState) {
           books.addAll(state.books);
+        } else if (state is FeaturedBooksPaginationFailureState) {
+          ScaffoldMessenger.of(context).showSnackBar(
+            SnackBar(
+              content: Text(state.errMessage),
+              backgroundColor: Colors.red,
+            ),
+          );
         }
       },
       builder: (context, state) {
         if (state is FeaturedBooksFailureState) {
           return Center(child: Text(state.errMessage));
         } else if (state is FeaturedBooksSuccessState ||
-            state is FeaturedBooksPaginationLoadingState) {
+            state is FeaturedBooksPaginationLoadingState ||
+            state is FeaturedBooksPaginationFailureState) {
           return FeaturedBooksListView(books: books);
         } else {
           return Center(child: CircularProgressIndicator());
