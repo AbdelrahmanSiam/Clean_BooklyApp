@@ -11,10 +11,10 @@ class FeaturedBooksCubit extends Cubit<FeaturedBooksState> {
   FeaturedBooksCubit(this.fetchFeaturedBooksUseCase)
     : super(FeaturedBooksInitialState());
   final FetchFeaturedBooksUseCase fetchFeaturedBooksUseCase;
-  Future<void> fetchFeaturedBooks() async {
+  Future<void> fetchFeaturedBooks({int pageNumber = 0}) async {
     emit(FeaturedBooksLoadingState());
     Either<Failure, List<BookEntity>> result = await fetchFeaturedBooksUseCase
-        .call();
+        .call(pageNumber);
     result.fold(
       (error) {
         emit(FeaturedBooksFailureState(errMessage: error.errMessage));

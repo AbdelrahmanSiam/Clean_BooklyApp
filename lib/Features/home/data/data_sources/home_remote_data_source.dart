@@ -7,7 +7,7 @@ import 'package:hive_flutter/adapters.dart';
 
 abstract class HomeRemoteDataSource {
   // we do not use Either class her because decision if data returns or not we make it into HomeRepo data layer to fetch data only
-  Future<List<BookEntity>> fetchFeaturedBooks();
+  Future<List<BookEntity>> fetchFeaturedBooks({int pageNumber = 0});
   Future<List<BookEntity>> fetchNewestBooks();
 }
 
@@ -16,9 +16,9 @@ class HomeRemoteDataSourceImpl extends HomeRemoteDataSource {
 
   HomeRemoteDataSourceImpl({required this.apiServices});
   @override
-  Future<List<BookEntity>> fetchFeaturedBooks() async {
+  Future<List<BookEntity>> fetchFeaturedBooks({int pageNumber = 0}) async {
     var data = await apiServices.get(
-      endPoint: "volumes?Filtering=free-ebooks&q=programming",
+      endPoint: "volumes?Filtering=free-ebooks&q=programming&startIndex=${pageNumber*10}",
     );
     List<BookEntity> booksList = parseBooks(data); // for Single Responsability
     saveBooksToHive(booksList, kFeaturedBox);
